@@ -1,19 +1,87 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+      <input type="text" v-model="query" placeholder="Give yer query" />
+    </div>
+    <div>
+      <button @click="getData">Run query</button>
+    </div>
+
+    <div v-for="v in values" :key="v.metadata_storage_path">
+      <h1>{{ v.metadata_storage_name }}</h1>
+      <h3>Content</h3>
+      <p>
+        {{ truncate(v.content, 500) }}
+      </p>
+
+      <h3>Organizations</h3>
+      <p>
+        {{ truncate(JSON.stringify(v.organizations), 500) }}
+      </p>
+
+      <h3>Locations</h3>
+      <p>
+        {{ truncate(JSON.stringify(v.locations), 500) }}
+      </p>
+
+      <h3>People</h3>
+      <p>
+        {{ truncate(JSON.stringify(v.people), 500) }}
+      </p>
+
+      <h3>Keyphrases</h3>
+      <p>
+        {{ truncate(JSON.stringify(v.keyphrases), 500) }}
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+const url = "https://search-semantive.search.windows.net/indexes/azureblob-index/docs/search?api-version=2016-09-01";
+const apiKey = "73AC349FB3ACBFF6468490EFC3A57C8F";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      values: [],
+      query: "*",
+    };
+  },
+  computed: {
+    queryVal: function () {
+      return this.query || "*";
+    },
+  },
+  methods: {
+    async getData(event) {
+      event.preventDefault();
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": apiKey,
+        },
+        body: JSON.stringify({
+          count: true,
+          skip: 0,
+          top: 50,
+          searchMode: "any",
+          queryType: "simple",
+          search: this.queryVal,
+        }),
+      });
+
+      const d = await response.json();
+      this.values = d.value;
+      console.log(Object.keys(this.values[0]))
+    },
+    truncate(str, n) {
+      return str.length > n ? str.substr(0, n - 1) + "..." : str;
+    },
+  },
+};
 </script>
 
 <style>
