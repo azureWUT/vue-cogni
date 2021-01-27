@@ -1,10 +1,14 @@
 <template>
   <div id="app">
-    <div>
-      <input type="text" v-model="query" placeholder="Give yer query" />
+    <div class="">
+      <input type="text" v-model="query" placeholder="Give yer query" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"/>
     </div>
     <div>
-      <button @click="getData">Run query</button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="getData">Run query</button>
+    </div>
+
+    <div>
+      {{ message }}
     </div>
 
     <div v-for="v in values" :key="v.metadata_storage_path">
@@ -16,29 +20,62 @@
 
       <h3>Organizations</h3>
       <p class="linkinp">
-        <a v-for="o in v.organizations" :key="o" @click="query = o; getData()">{{o}}</a>
+        <a
+          v-for="o in v.organizations"
+          :key="o"
+          @click="
+            query = o;
+            getData();
+          "
+          >{{ o }}</a
+        >
       </p>
 
       <h3>Locations</h3>
       <p class="linkinp">
-        <a v-for="o in v.locations" :key="o" @click="query = o; getData()">{{o}}</a>
+        <a
+          v-for="o in v.locations"
+          :key="o"
+          @click="
+            query = o;
+            getData();
+          "
+          >{{ o }}</a
+        >
       </p>
 
       <h3>People</h3>
       <p class="linkinp">
-        <a v-for="o in v.people" :key="o" @click="query = o; getData()">{{o}}</a>
+        <a
+          v-for="o in v.people"
+          :key="o"
+          @click="
+            query = o;
+            getData();
+          "
+          >{{ o }}</a
+        >
       </p>
 
       <h3>Keyphrases</h3>
       <p class="linkinp">
-        <a v-for="o in v.keyphrases" :key="o" @click="query = o; getData()">{{o}}</a>
+        <a
+          v-for="o in v.keyphrases"
+          :key="o"
+          @click="
+            query = o;
+            getData();
+          "
+          >{{ o }}</a
+        >
       </p>
     </div>
   </div>
 </template>
 
 <script>
-const url = "https://search-semantive.search.windows.net/indexes/azureblob-index/docs/search?api-version=2016-09-01";
+const url =
+  "https://search-semantive.search.windows.net/indexes/azureblob-index/docs/search?api-version=2016-09-01";
 const apiKey = "73AC349FB3ACBFF6468490EFC3A57C8F";
 
 export default {
@@ -47,6 +84,7 @@ export default {
     return {
       values: [],
       query: "*",
+      message: "",
     };
   },
   computed: {
@@ -57,6 +95,7 @@ export default {
   methods: {
     async getData(event) {
       if (event) event.preventDefault();
+      this.message = "";
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -75,7 +114,7 @@ export default {
 
       const d = await response.json();
       this.values = d.value;
-      console.log(Object.keys(this.values[0]))
+      console.log(Object.keys(this.values[0]));
     },
     truncate(str, n) {
       return str.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -94,12 +133,12 @@ export default {
   margin-top: 60px;
 }
 
-.linkinp > a:hover { 
+.linkinp > a:hover {
   cursor: pointer;
   color: red;
 }
 
-.linkinp > a:not(:last-child):after { 
-  content: ', '
+.linkinp > a:not(:last-child):after {
+  content: ", ";
 }
 </style>
