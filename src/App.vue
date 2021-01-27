@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="w-full bg-blue-500 p-2 items-center">
-      <div class="items-center text-xl font-semibold flex justify-center">
+      <div class="items-center text-3xl font-semibold flex justify-center py-2">
         Semantive on Azure Search <img class="w-10 h-10 ml-2" src="favicon.ico" alt="">
       </div>
     </div>
@@ -43,9 +43,10 @@
             <div class="font-semibold">
               Organizations
             </div>
-            <div class="my-2 text-red-500" v-if="v.organizations.length === 0">No bindings found:(</div>
-            <div class="linkinp" v-else>
+            <div class="my-2 text-red-500 font-semibold" v-if="v.organizations.length === 0">No bindings found:(</div>
+            <div class="linkinp flex flex-wrap" v-else>
               <a
+                  class="button-link"
                   v-for="o in v.organizations"
                   :key="o"
                   @click="
@@ -61,9 +62,10 @@
             <div class="font-semibold">
               Locations
             </div>
-            <div class="my-2 text-red-500" v-if="v.locations.length === 0">No bindings found:(</div>
-            <div class="linkinp" v-else>
+            <div class="my-2 text-red-500 font-semibold" v-if="v.locations.length === 0">No bindings found:(</div>
+            <div class="linkinp flex flex-wrap" v-else>
               <a
+                  class="button-link"
                   v-for="o in v.locations"
                   :key="o"
                   @click="
@@ -79,9 +81,10 @@
             <div class="font-semibold">
               People
             </div>
-            <div class="my-2 text-red-500" v-if="v.people.length === 0">No bindings found:(</div>
-            <div class="linkinp" v-else>
+            <div class="my-2 text-red-500 font-semibold" v-if="v.people.length === 0">No bindings found:(</div>
+            <div class="linkinp flex flex-wrap" v-else>
               <a
+                  class="button-link"
                   v-for="o in v.people"
                   :key="o"
                   @click="
@@ -97,9 +100,10 @@
             <div class="font-semibold">
               Keyphrases
             </div>
-            <div class="my-2 text-red-500" v-if="v.keyphrases.length === 0">No bindings found:(</div>
-            <div class="linkinp" v-else>
+            <div class="my-2 text-red-500 font-semibold" v-if="v.keyphrases.length === 0">No bindings found:(</div>
+            <div class="linkinp flex flex-wrap" v-else>
               <a
+                  class="button-link"
                   v-for="o in v.keyphrases"
                   :key="o"
                   @click="
@@ -169,7 +173,7 @@ export default {
 <style>
 .linkinp > a:hover {
   cursor: pointer;
-  color: red;
+  color: lightgray;
 }
 
 .linkinp > a:not(:last-child):after {

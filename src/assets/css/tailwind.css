@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button-link {
+    @apply bg-blue-400 text-white rounded border px-2 py-1 m-2
+}
+
+.button-link:hover{
+    @apply bg-blue-500
+}
