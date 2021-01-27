@@ -10,7 +10,7 @@
         Type your query:
       </div>
       <div class="mx-4">
-        <input type="text" v-model="query" placeholder="Give yer query"
+        <input type="text" v-model="query"
                class="bg-gray-100 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"/>
       </div>
       <div class="mx-4">
@@ -20,13 +20,11 @@
       </div>
     </div>
 
-    <div>
-      {{ message }}
-    </div>
+    <div class="my-2 text-red-500 font-semibold text-center" v-if="message">{{message}}</div>
 
     <div v-for="(v, index) in values" :key="v.metadata_storage_path">
       <div class="bg-gray-200 p-4">
-        <strong>{{ index + 1 }}. {{ v.metadata_storage_name }}</strong>
+        <strong>{{ index + 1 }}. {{ v.metadata_storage_name }}</strong> [score: {{v["@search.score"]}}]
       </div>
       <div class="bg-gray-100 p-4">
         <div class="mx-2">
@@ -35,7 +33,7 @@
               Content
             </div>
             <div>
-              {{ truncate(v.content, 500) }}
+              {{ truncate(v.content, 1000) }}
             </div>
           </div>
           <hr>
@@ -121,8 +119,9 @@
 </template>
 
 <script>
+const index = "search-semantive-index"
 const url =
-    "https://search-semantive.search.windows.net/indexes/azureblob-index/docs/search?api-version=2016-09-01";
+    `https://search-semantive.search.windows.net/indexes/${index}/docs/search?api-version=2016-09-01`;
 const apiKey = "73AC349FB3ACBFF6468490EFC3A57C8F";
 
 export default {
@@ -143,6 +142,7 @@ export default {
     async getData(event) {
       if (event) event.preventDefault();
       this.message = "";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -161,6 +161,7 @@ export default {
 
       const d = await response.json();
       this.values = d.value;
+      if (this.values.length === 0) this.message = "No results :("
       console.log(Object.keys(this.values[0]));
     },
     truncate(str, n) {
@@ -174,9 +175,5 @@ export default {
 .linkinp > a:hover {
   cursor: pointer;
   color: lightgray;
-}
-
-.linkinp > a:not(:last-child):after {
-  content: ", ";
 }
 </style>
