@@ -15,23 +15,23 @@
       </p>
 
       <h3>Organizations</h3>
-      <p>
-        {{ truncate(JSON.stringify(v.organizations), 500) }}
+      <p class="linkinp">
+        <a v-for="o in v.organizations" :key="o" @click="query = o; getData()">{{o}}</a>
       </p>
 
       <h3>Locations</h3>
-      <p>
-        {{ truncate(JSON.stringify(v.locations), 500) }}
+      <p class="linkinp">
+        <a v-for="o in v.locations" :key="o" @click="query = o; getData()">{{o}}</a>
       </p>
 
       <h3>People</h3>
-      <p>
-        {{ truncate(JSON.stringify(v.people), 500) }}
+      <p class="linkinp">
+        <a v-for="o in v.people" :key="o" @click="query = o; getData()">{{o}}</a>
       </p>
 
       <h3>Keyphrases</h3>
-      <p>
-        {{ truncate(JSON.stringify(v.keyphrases), 500) }}
+      <p class="linkinp">
+        <a v-for="o in v.keyphrases" :key="o" @click="query = o; getData()">{{o}}</a>
       </p>
     </div>
   </div>
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     async getData(event) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -92,5 +92,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.linkinp > a:hover { 
+  cursor: pointer;
+  color: red;
+}
+
+.linkinp > a:not(:last-child):after { 
+  content: ', '
 }
 </style>
